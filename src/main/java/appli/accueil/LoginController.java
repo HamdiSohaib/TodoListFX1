@@ -1,5 +1,6 @@
 package appli.accueil;
-
+import repository.UtilisateurRepository;
+import model.Utilisateur;
 import appli.StartApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class LoginController {
+    private UtilisateurRepository utilisateurRepository = new UtilisateurRepository();
+
     private static Stage mainStage;
     @FXML
     private Button connexionButton;

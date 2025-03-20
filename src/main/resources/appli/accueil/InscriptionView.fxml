@@ -15,41 +15,47 @@
          </font>
       </Label>
       <TextField fx:id="nomField" layoutX="178.0" layoutY="162.0" />
-      <Label layoutX="132.0" layoutY="164.0" prefHeight="13.0" prefWidth="80.0" text="Nom :">
+      <Label layoutX="134.0" layoutY="164.0" prefHeight="13.0" prefWidth="80.0" text="Nom :">
          <font>
             <Font name="System Italic" size="15.0" />
          </font>
       </Label>
       <TextField fx:id="prenomField" layoutX="178.0" layoutY="195.0" />
-      <Label layoutX="112.0" layoutY="197.0" prefHeight="21.0" prefWidth="65.0" text="Prénom :">
+      <Label layoutX="117.0" layoutY="197.0" prefHeight="21.0" prefWidth="65.0" text="Prénom :">
          <font>
             <Font name="System Italic" size="15.0" />
          </font>
       </Label>
-      <Button fx:id="inscriptionButton" layoutX="213.0" layoutY="340.0" mnemonicParsing="false" onAction="#redirectionInscription" text="Inscription" textFill="#0abe00" />
+      <Button fx:id="inscriptionButton" layoutX="213.0" layoutY="373.0" mnemonicParsing="false" onAction="#Inscription" text="Inscription" textFill="#0abe00" />
       <Label fx:id="connectedText" layoutX="78.0" layoutY="98.0" prefHeight="66.0" prefWidth="351.0" text=" " textAlignment="CENTER">
          <font>
             <Font size="26.0" />
          </font>
       </Label>
       <TextField fx:id="emailField" layoutX="178.0" layoutY="228.0" />
-      <Label layoutX="124.0" layoutY="230.0" prefHeight="21.0" prefWidth="47.0" text="Email :">
+      <Label layoutX="132.0" layoutY="230.0" prefHeight="21.0" prefWidth="47.0" text="Email :">
          <font>
             <Font name="System Italic" size="15.0" />
          </font>
       </Label>
-      <Label layoutX="76.0" layoutY="262.0" prefHeight="21.0" prefWidth="101.0" text="Mot de passe :">
+      <Label layoutX="82.0" layoutY="294.0" prefHeight="21.0" prefWidth="101.0" text="Mot de passe :">
          <font>
             <Font name="System Italic" size="15.0" />
          </font>
       </Label>
-      <Label layoutX="76.0" layoutY="295.0" prefHeight="21.0" prefWidth="101.0" text="Confirmation :">
+      <Label layoutX="78.0" layoutY="329.0" prefHeight="21.0" prefWidth="101.0" text="Confirmation :">
          <font>
             <Font name="System Italic" size="15.0" />
          </font>
       </Label>
       <Button fx:id="connexionButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#redirectionConnexion" text="Retour " textFill="#2200ff" />
-      <PasswordField fx:id="confirmationMdpField" layoutX="179.0" layoutY="293.0" />
-      <PasswordField fx:id="mdpField" layoutX="179.0" layoutY="260.0" />
+      <PasswordField fx:id="confirmationMdpField" layoutX="179.0" layoutY="328.0" />
+      <PasswordField fx:id="mdpField" layoutX="178.0" layoutY="295.0" />
+      <TextField fx:id="nomRole1" layoutX="178.0" layoutY="260.0" />
+      <Label fx:id="role" layoutX="139.0" layoutY="262.0" prefHeight="21.0" prefWidth="47.0" text="Role :">
+         <font>
+            <Font name="System Italic" size="15.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
