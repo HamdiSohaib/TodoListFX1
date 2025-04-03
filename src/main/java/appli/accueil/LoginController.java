@@ -1,72 +1,52 @@
 package appli.accueil;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
 import repository.UtilisateurRepository;
 import model.Utilisateur;
+import session.SessionUtilisateur;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import appli.StartApplication;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class LoginController {
-    private UtilisateurRepository utilisateurRepository = new UtilisateurRepository();
 
-    private static Stage mainStage;
-    @FXML
-    private Button connexionButton;
-    @FXML
-    private Hyperlink inscriptionHyperlink;
-    @FXML
-    private Label mdpText;
-    @FXML
-    private TextField mdpField;
-    @FXML
-    private Label emailText;
-    @FXML
-    private Label connectedText;
     @FXML
     private TextField emailField;
     @FXML
-    private Label erreurLabel;
+    private PasswordField passwordField;
     @FXML
-    private Label welcomeText;
+    private Label errorLabel;
+
+    private final UtilisateurRepository utilisateurRepository = new UtilisateurRepository();
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @FXML
-    void onConnexionButtonClick() {
-        System.out.println("Email saisi : "+getEmailField().getText());
-        System.out.println("Mot de Passe saisi : "+ getMdpField().getText());
-        if (getEmailField().getText().equals("email") && getMdpField().getText().equals("Azerty1234")) {
-            connectedText.setText("Vous voilà connecte !");
-        }else {
-            connectedText.setText("Email ou Mot de Passe saisi incorrect");
+    protected void handleLogin() {
+        String email = emailField.getText();
+        String password = passwordField.getText();
+
+        Utilisateur utilisateur = utilisateurRepository.getUtilisateurParEmail(email);
+
+        if (utilisateur != null && passwordEncoder.matches(password, utilisateur.getMdp())) {
+            SessionUtilisateur.getInstance().sauvegardeSession(utilisateur);
+            errorLabel.setVisible(false);
+            try {
+                StartApplication.changeScene("Accueil");
+            } catch (Exception e) {
+                System.out.println("Erreur de redirection : " + e.getMessage());
+            }
+        } else {
+            errorLabel.setText("Email ou mot de passe incorrect.");
+            errorLabel.setVisible(true);
         }
     }
-    @FXML
-    void redirectionInscription() throws IOException {
-        StartApplication.changeScene("accueil/Inscription");
-    }
-    @FXML
-    public TextField getMdpField() {
-        return mdpField;
-    }
 
     @FXML
-    public void setMdpField(TextField mdpField) {
-        this.mdpField = mdpField;
-    }
-
-    @FXML
-    public TextField getEmailField() {
-        return emailField;
-    }
-
-    @FXML
-    public void setEmailField(TextField emailField) {
-        this.emailField = emailField;
+    protected void goToRegister() {
+        try {
+            StartApplication.changeScene("Inscription");
+        } catch (Exception e) {
+            System.out.println("Erreur navigation : " + e.getMessage());
+        }
     }
 }

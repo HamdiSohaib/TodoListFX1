@@ -9,10 +9,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UtilisateurRepository {
-    private Connection cnx;
+    private final Connection cnx = Database.getConnexion();
 
     public UtilisateurRepository() {
-        this.cnx = Database.getConnexion();
     }
 
     public boolean ajouterUtilisateur(Utilisateur utilisateur) {
@@ -66,7 +65,7 @@ public class UtilisateurRepository {
         return null;
     }
 
-    public void supprimerUtilisateurParEmail(String email) throws SQLException {
+    public boolean supprimerUtilisateurParEmail(String email) throws SQLException {
         String sql = "DELETE FROM utilisateur WHERE email = ?";
         try {
             PreparedStatement stmt = cnx.prepareStatement(sql);
@@ -75,9 +74,10 @@ public class UtilisateurRepository {
         } catch (SQLException e) {
             System.out.println("Erreur : " + e.getMessage());
         }
+        return false;
     }
 
-    public void mettreAJourUtilisateur(Utilisateur utilisateur) {
+    public boolean mettreAJourUtilisateur(Utilisateur utilisateur) {
         String sql = "UPDATE utilisateur SET nom = ? , prenom = ?, mdp = ?, role = ? WHERE email = ?";
         try {
             PreparedStatement stmt = cnx.prepareStatement(sql);
@@ -90,5 +90,6 @@ public class UtilisateurRepository {
         } catch (Exception e) {
             System.out.println("Erreur : " + e.getMessage());
         }
+        return false;
     }
 };

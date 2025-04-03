@@ -1,74 +1,69 @@
 package appli.accueil;
 
-import appli.StartApplication;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import model.Utilisateur;
 import repository.UtilisateurRepository;
-
-import java.io.IOException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import appli.StartApplication;
 
 public class InscriptionController {
-    @FXML
-    private TextField confirmationMdpField;
-    @FXML
-    private Label connectedText;
-    @FXML
-    private TextField emailField;
-    @FXML
-    private Button inscriptionButton; //aaa
-    @FXML
-    private TextField mdpField;
-    @FXML
-    private TextField nomField;
-    @FXML
-    private TextField prenomField;
-    @FXML
-    private Label welcomeText;
+
+    @FXML private TextField nomField;
+    @FXML private TextField prenomField;
+    @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
+    @FXML private PasswordField confirmPasswordField;
+    @FXML private Label errorLabel;
+
+    private final UtilisateurRepository utilisateurRepository = new UtilisateurRepository();
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @FXML
-    private TextField nomRole1;
+    protected void handleRegister() {
+        String nom = nomField.getText();
+        String prenom = prenomField.getText();
+        String email = emailField.getText();
+        String password = passwordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
 
-    UtilisateurRepository repo = new UtilisateurRepository();
+        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            errorLabel.setText("Tous les champs sont obligatoires !");
+            return;
+        }
 
-    @FXML
-    void redirectionInscription(ActionEvent event) {
-        System.out.println("Nom :  " + nomField.getText());
-        System.out.println("Prenom :  " + prenomField.getText());
-        System.out.println("Email :  " + emailField.getText());
-        System.out.println("Mot de Passe :  " + mdpField.getText());
+        if (!password.equals(confirmPassword)) {
+            errorLabel.setText("Les mots de passe ne correspondent pas !");
+            return;
+        }
 
-        if (confirmationMdpField.getText().equals(mdpField.getText())) {
-            connectedText.setText("Vous voilà Inscrit !");
-            connectedText.setVisible(true);
+        if (utilisateurRepository.getUtilisateurParEmail(email) != null) {
+            errorLabel.setText("Cet email est déjà utilisé.");
+            return;
+        }
+
+        String hashedPassword = passwordEncoder.encode(password);
+        Utilisateur nouvelUtilisateur = new Utilisateur(nom, prenom, email, hashedPassword, "utilisateur");
+
+        boolean success = utilisateurRepository.ajouterUtilisateur(nouvelUtilisateur);
+        if (success) {
+            errorLabel.setText("");
+            try {
+                StartApplication.changeScene("Login");
+            } catch (Exception e) {
+                System.out.println("Erreur navigation : " + e.getMessage());
+            }
         } else {
-            connectedText.setText("Erreur : Les deux mot de passe sont différents !");
-        }
-        if (emailField.getText().equals("email")) {
-            connectedText.setText("Erreur : Email déjà utilisé !");
-        }
-
-        if (confirmationMdpField.getText().isEmpty() || nomField.getText().isEmpty() || prenomField.getText().isEmpty() || emailField.getText().isEmpty() || mdpField.getText().isEmpty()) {
-            connectedText.setText("Erreur : Champ(s) vide(s) !");
+            errorLabel.setText("Erreur lors de l'inscription.");
         }
     }
 
     @FXML
-    void redirectionConnexion() throws IOException {
-        StartApplication.changeScene("accueil/Login");
-    }
-
-    @FXML
-    public void Inscription(ActionEvent event) {
-        repo.ajouterUtilisateur(new Utilisateur(nomField.getText(), prenomField.getText(),emailField.getText(),mdpField.getText(),nomRole1.getText()));
-        System.out.println("Vous êtes bien inscrit ! ");
-        connectedText.setText("Vous voilà Inscrit !");
-        connectedText.setVisible(true);
-
-
+    protected void goToLogin() {
+        try {
+            StartApplication.changeScene("Login");
+        } catch (Exception e) {
+            System.out.println("Erreur navigation : " + e.getMessage());
+        }
     }
 }
-
